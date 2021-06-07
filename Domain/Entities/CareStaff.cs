@@ -9,5 +9,13 @@ namespace Domain.Entities
 {
     public class CareStaff : People
     {
+        public string Type { get; set; }
+        public bool WorkStatus { get; set; }
+
+        public CareStaff(string type, string name, string surname) : base(name, surname)
+        {
+            Type = type;
+        }
+
     }
 }
