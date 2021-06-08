@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("Auth")]
-        public ActionResult<Response<LoginUserResponse>> Login(LoginUserRequest request)
+        public ActionResult<Response<LoginUserResponse>> Login(UserLoginRequest request)
         {
             var response = _userService.LoginUser(request);
             return StatusCode((int)response.Code, response);

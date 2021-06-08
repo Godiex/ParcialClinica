@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Factory.FactoryPeople
+namespace Application.Http.Requests
 {
-    public class FactoryPeople
+    public class QuoteRequest
     {
-        
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Repositories
+namespace Application.Http.Requests
 {
-    interface IPatientRepository
+    public class CareStaffRequest
     {
     }
 }

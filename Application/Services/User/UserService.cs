@@ -18,7 +18,7 @@ namespace Application.Services
             _userRepository = unitOfWork.UserRepository;
         }
 
-        public Response<LoginUserResponse> LoginUser(LoginUserRequest request)
+        public Response<LoginUserResponse> LoginUser(UserLoginRequest request)
         {
             // TODO: User authentication code
             var user = _userRepository.FindFirstOrDefault(x => x.Username == request.Username && x.Password == Hash.GetSha256(request.Password));
@@ -26,7 +26,7 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public Response<CreateUserResponse> CreateUser(CreateUserRequest request)
+        public Response<CreateUserResponse> CreateUser(UserRequest request)
         {
             // TODO: User creation code
             var user = new User

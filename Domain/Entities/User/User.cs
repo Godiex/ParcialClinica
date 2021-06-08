@@ -12,6 +12,7 @@ namespace Domain.Entities
             Username = username;
             Password = password;
         }
+
         public User()
         {
 
