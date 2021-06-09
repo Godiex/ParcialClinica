@@ -1,4 +1,5 @@
-﻿namespace Application.Http.Requests
+﻿
+namespace Application.Http.Requests
 {
     public class UserRequest
     {

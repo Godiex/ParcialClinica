@@ -20,23 +20,25 @@ namespace Application.Services
 
         public Response<LoginUserResponse> LoginUser(UserLoginRequest request)
         {
-            // TODO: User authentication code
-            var user = _userRepository.FindFirstOrDefault(x => x.Username == request.Username && x.Password == Hash.GetSha256(request.Password));
-            // TODO: More code here
+            User user = _userRepository.FindFirstOrDefault(x => x.Username == request.Username && x.Password == Hash.GetSha256(request.Password));
             throw new NotImplementedException();
         }
 
-        public Response<CreateUserResponse> CreateUser(UserRequest request)
+        public Response<CreateUserResponse> CreateUser(UserRequest userRequest)
         {
-            // TODO: User creation code
-            var user = new User
-            {
-                Username = request.Username,
-                Password = Hash.GetSha256(request.Password)
-            };
+            User user = MapUser(userRequest);
             _userRepository.Add(user);
-            // TODO: More code here
             throw new NotImplementedException();
+        }
+
+        public User MapUser(UserRequest userRequest) 
+        {
+            User user = new User
+            {
+                Username = userRequest.Username,
+                Password = Hash.GetSha256(userRequest.Password)
+            };
+            return user;
         }
     }
 }

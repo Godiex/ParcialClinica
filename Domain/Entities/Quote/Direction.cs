@@ -13,6 +13,13 @@ namespace Domain.Entities
         public string City { get; set; }
         public string Neighborhood { get; set; }
 
+        #region Relaciones entre tablas
+
+        public int idPatient { get; set; }
+        public virtual Patient Patient { get; set; }
+
+        #endregion Relaciones entre tablas
+
         public Direction(string nomenclature, string city, string neighborhood)
         {
             Nomenclature = nomenclature;

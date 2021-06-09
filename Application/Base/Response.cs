@@ -14,5 +14,38 @@ namespace Application.Base
     public class Response<T> : BaseResponse, IResponse<T>
     {
         public T Data { get; set; }
+
+        public static Response<T> CreateResponseFailed(string message, HttpStatusCode code) 
+        {
+            return new Response<T>
+            {
+                Message = message,
+                Code = code,
+                State = false
+            };
+        }
+
+        public static Response<T> CreateResponseSuccess(string message, HttpStatusCode code, T data)
+        {
+            return new Response<T>
+            {
+                Message = message,
+                Code = code,
+                Data = data,
+                State = true
+           
+            };
+        }
+
+        public static Response<T> CreateResponseSuccess(string message, HttpStatusCode code)
+        {
+            return new Response<T>
+            {
+                Message = message,
+                Code = code,
+                State = true
+            };
+        }
+
     }
 }

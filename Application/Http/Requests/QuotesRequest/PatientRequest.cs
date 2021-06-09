@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Http.Requests;
+using System;
 
 namespace Application.Http.Requests
 {
-    public class PatientRequest
+    public class PatientRequest : PeopleRequest
     {
         public DateTime DateOfBirth { get; set; }
         public string Telephone { get; set; }

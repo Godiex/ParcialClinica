@@ -7,6 +7,9 @@ namespace Domain.Contract
     {
         #region [Repositories]
         public IUserRepository UserRepository { get;}
+        public ICareStaffRepository CareStaffRepository { get; }
+        public IPatientRepository PatientRepository { get; }
+        public IQuoteRepository QuoteRepository { get; }
         #endregion
 
         int Commit();

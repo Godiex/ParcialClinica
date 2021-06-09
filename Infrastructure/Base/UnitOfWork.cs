@@ -17,7 +17,14 @@ namespace Infrastructure.Base
         #region Repositories
 
         private IUserRepository _userRepository;
+        private ICareStaffRepository _careStaffRepository;
+        private IPatientRepository _patientRepository;
+        private IQuoteRepository _quoteRepository;
+
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_dbContext);
+        public ICareStaffRepository CareStaffRepository => _careStaffRepository ??= new CareStaffRepository(_dbContext);
+        public IPatientRepository PatientRepository => _patientRepository ??= new PatientRepository(_dbContext);
+        public IQuoteRepository QuoteRepository => _quoteRepository ??= new QuoteRepository(_dbContext);
         #endregion
 
         public void Dispose()

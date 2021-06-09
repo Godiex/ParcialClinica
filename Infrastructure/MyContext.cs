@@ -21,6 +21,11 @@ namespace Infrastructure
         {
             // Configuration on creation
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(d => d.Direction)
+                .WithOne(i => i.Patient)
+                .HasForeignKey<Patient>(d => d.IdDireccion);
         }
     }
 }

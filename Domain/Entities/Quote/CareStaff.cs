@@ -11,6 +11,7 @@ namespace Domain.Entities
     {
         public string Type { get; set; }
         public bool WorkStatus { get; set; }
+        public User User { get; set; }
 
         public CareStaff(string type, string name, string surname) : base(name, surname)
         {

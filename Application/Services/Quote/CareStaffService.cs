@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Http.Requests
+namespace Application.Services.Quote
 {
-    public class QuoteRequest
+    public class CareStaffService
     {
     }
 }
