@@ -23,9 +23,14 @@ namespace Infrastructure
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Patient>()
-                .HasOne(d => d.Direction)
-                .WithOne(i => i.Patient)
-                .HasForeignKey<Patient>(d => d.IdDireccion);
+                .HasOne(p => p.Direction)
+                .WithOne(d => d.Patient)
+                .HasForeignKey<Direction>(d => d.IdPatient);
+
+            modelBuilder.Entity<CareStaff>()
+                .HasOne(c => c.User)
+                .WithOne(u => u.CareStaff)
+                .HasForeignKey<User>(u => u.IdCareStaff);
         }
     }
 }

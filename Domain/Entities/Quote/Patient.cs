@@ -16,6 +16,10 @@ namespace Domain.Entities
         public int IdDireccion { get; set; }
         public Direction Direction { get; set; }
 
+        #region Relacion entre tablas
+        public int I { get; set; }
+        #endregion Relacion entre tablas    
+
         public Patient(DateTime dateOfBirth, string telephone, Direction direction, string name, string surname) : base(name, surname)
         {
             DateOfBirth = dateOfBirth;
