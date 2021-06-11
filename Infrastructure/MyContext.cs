@@ -15,6 +15,7 @@ namespace Infrastructure
         public DbSet<Patient> Patients { get; set; }
         public DbSet<CareStaff> CareStaffs { get; set; }
         public DbSet<Quote> Quotes { get; set; }
+        public DbSet<QuoteCareStaff> QuoteCareStaffs { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,15 +23,8 @@ namespace Infrastructure
             // Configuration on creation
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Patient>()
-                .HasOne(p => p.Direction)
-                .WithOne(d => d.Patient)
-                .HasForeignKey<Direction>(d => d.IdPatient);
-
-            modelBuilder.Entity<CareStaff>()
-                .HasOne(c => c.User)
-                .WithOne(u => u.CareStaff)
-                .HasForeignKey<User>(u => u.IdCareStaff);
+            modelBuilder.Entity<QuoteCareStaff>()
+                .HasKey(q => new { q.IdQuote, q.IdCareStaff });
         }
     }
 }

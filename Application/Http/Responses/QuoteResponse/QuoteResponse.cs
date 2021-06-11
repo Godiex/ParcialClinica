@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Application.Http.Responses.QuoteResponse
         public string State { get; set; }
         public PatientResponse Patient { get; set; }
         private List<CareStaffResponse> CareStaff { get; set; }
-        public void AddCareStaff(CareStaff careStaff)
+        public void AddCareStaff(CareStaffResponse careStaff)
         {
             CareStaff.Add(careStaff);
         }

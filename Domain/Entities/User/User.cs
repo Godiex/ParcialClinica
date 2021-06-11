@@ -8,9 +8,7 @@ namespace Domain.Entities
         public string Password { get; set; }
 
         #region Relaciones entre tablas
-
         public int IdCareStaff { get; set; }
-        public virtual CareStaff CareStaff { get; set; }
 
         #endregion Relaciones entre tablas
 

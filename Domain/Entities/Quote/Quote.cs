@@ -23,6 +23,10 @@ namespace Domain.Entities
             EndTime = endTime;
             Patient = patient;
         }
+        public Quote()
+        {
+
+        }
 
         public void AddCareStaff(CareStaff careStaff) 
         {

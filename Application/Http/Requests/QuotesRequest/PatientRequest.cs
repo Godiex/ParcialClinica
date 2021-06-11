@@ -9,4 +9,11 @@ namespace Application.Http.Requests
         public string Telephone { get; set; }
         public DirectionRequest Direction { get; set; }
     }
+
+    public class PatientRequestUpdate : PeopleRequest
+    {
+        public DateTime DateOfBirth { get; set; }
+        public string Telephone { get; set; }
+        public DirectionRequest Direction { get; set; }
+    }
 }

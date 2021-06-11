@@ -14,10 +14,12 @@ namespace Application.Services
     public class PatientService : Service<Patient>
     {
         private readonly IPatientRepository _patientRepository;
-        
+        private readonly ICareStaffRepository _careStaffRepository;
+
         public PatientService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _patientRepository = unitOfWork.PatientRepository;
+            _careStaffRepository = unitOfWork.CareStaffRepository;
         }
 
         public Response<PatientResponse> Create(PatientRequest patientRequest)
@@ -34,21 +36,21 @@ namespace Application.Services
 
         public Response<List<PatientResponse>> GetActivateds()
         {
-            List<Patient> patients = (List<Patient>)_patientRepository.FindBy(patient => patient.State == true);
+            List<Patient> patients = (List<Patient>)_patientRepository.FindBy(patient => patient.State == true).ToList();
             List<PatientResponse> patientResponses = ConvertListPatientsResponse(patients);
             return Response<List<PatientResponse>>.CreateResponseSuccess($"Pacientes consultado con exito, Resultados : {patientResponses.Count}", HttpStatusCode.OK, patientResponses);
         }
 
         public Response<List<PatientResponse>> GetAll()
         {
-            List<Patient> patients = (List<Patient>)_patientRepository.GetAll(patient => patient.OrderBy(p => p.Id));
+            List<Patient> patients = (List<Patient>)_patientRepository.GetAll(patient => patient.OrderBy(p => p.Id)).ToList();
             List<PatientResponse> patientResponses = ConvertListPatientsResponse(patients);
             return Response<List<PatientResponse>>.CreateResponseSuccess($"Pacientes consultado con exito, Resultados : {patientResponses.Count}", HttpStatusCode.OK, patientResponses);
         }
 
-        public Response<PatientResponse> Update(Patient patientUpdated) 
+        public Response<PatientResponse> Update(string identification,Patient patientUpdated) 
         {
-            if (PatientIsRegistered(patientUpdated.Identification))
+            if (PatientIsRegistered(identification))
             {
                 _patientRepository.Edit(patientUpdated);
                 UnitOfWork.Commit();
@@ -72,7 +74,8 @@ namespace Application.Services
         private bool PatientIsRegistered(string identification)
         {
             Patient patient = _patientRepository.FindFirstOrDefault(patient => patient.Identification == identification);
-            return patient != null ? true : false;
+            CareStaff careStaff = _careStaffRepository.FindFirstOrDefault(careStaff => careStaff.Identification == identification);
+            return patient != null && careStaff != null ? true : false;
         }
 
         private List<PatientResponse> ConvertListPatientsResponse(List<Patient> patients)

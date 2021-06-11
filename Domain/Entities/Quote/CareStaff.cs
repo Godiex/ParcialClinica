@@ -15,14 +15,17 @@ namespace Domain.Entities
 
         #region Relaciones entre tablas
 
-        public int Id { get; set; }
-        public virtual Patient Patient { get; set; }
+        public List<Quote> Quotes { get; set; }
 
         #endregion Relaciones entre tablas
 
         public CareStaff(string type, string name, string surname) : base(name, surname)
         {
             Type = type;
+        }
+        public CareStaff()
+        {
+
         }
 
     }

@@ -14,9 +14,7 @@ namespace Domain.Entities
         public string Neighborhood { get; set; }
 
         #region Relaciones entre tablas
-
         public int IdPatient { get; set; }
-        public virtual Patient Patient { get; set; }
 
         #endregion Relaciones entre tablas
 

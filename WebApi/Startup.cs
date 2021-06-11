@@ -1,6 +1,8 @@
 using System;
 using System.Text;
+using Domain.Contract;
 using Infrastructure;
+using Infrastructure.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,8 +30,11 @@ namespace WebApi
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "WebApi", Version = "v1"}); });
 
-            services.AddDbContext<MyContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("Postgres"),
+            services.AddDbContext<MyContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("ClinicConnection"),
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDbContext, MyContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(
