@@ -19,5 +19,6 @@ namespace Application.Http.Responses.QuoteResponse
             Photo = careStaff.Photo;
             WorkStatus = careStaff.WorkStatus;
         }
+
     }
 }

@@ -39,14 +39,13 @@ namespace Application.Services
             {
                 return Response<PatientResponse>.CreateResponseFailed(e.Message, HttpStatusCode.InternalServerError);
             }
-
         }
 
         public Response<List<PatientResponse>> GetActivateds()
         {
             try
             {
-                List<Patient> patients = (List<Patient>)_patientRepository.FindBy(patient => patient.State == true).ToList();
+                List<Patient> patients = _patientRepository.FindBy(p => p.State == true, "Direction").ToList();
                 List<PatientResponse> patientResponses = ConvertListPatientsResponse(patients);
                 return Response<List<PatientResponse>>.CreateResponseSuccess($"Pacientes consultado con exito, Resultados : {patientResponses.Count}", HttpStatusCode.OK, patientResponses);
             }
@@ -60,7 +59,7 @@ namespace Application.Services
         {
             try
             {
-                List<Patient> patients = (List<Patient>)_patientRepository.GetAll(patient => patient.OrderBy(p => p.Id)).ToList();
+                List<Patient> patients = _patientRepository.FindBy(p => p != null, "Direction", patient => patient.OrderBy(p => p.Id)).ToList();
                 List<PatientResponse> patientResponses = ConvertListPatientsResponse(patients);
                 return Response<List<PatientResponse>>.CreateResponseSuccess($"Pacientes consultado con exito, Resultados : {patientResponses.Count}", HttpStatusCode.OK, patientResponses);
             }

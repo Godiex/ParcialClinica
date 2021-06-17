@@ -13,10 +13,21 @@ namespace Application.Http.Responses.QuoteResponse
         public DateTime EndTime { get; set; }
         public string State { get; set; }
         public PatientResponse Patient { get; set; }
-        private List<CareStaffResponse> CareStaff { get; set; }
-        public void AddCareStaff(CareStaffResponse careStaff)
+        public List<CareStaffResponse> CareStaff { get; set; }
+
+        public QuoteResponse(Quote quote)
         {
-            CareStaff.Add(careStaff);
+            StartTime = quote.StartTime;
+            EndTime = quote.EndTime;
+            State = quote.State;
         }
+
+        public QuoteResponse Include(List<CareStaff> careStaff, Patient patient) 
+        {
+            CareStaff = careStaff.ConvertAll(c => new CareStaffResponse(c)).ToList();
+            Patient = new PatientResponse(patient);
+            return this;
+        }
+
     }
 }

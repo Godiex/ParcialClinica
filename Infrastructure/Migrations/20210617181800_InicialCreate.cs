@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class IntialCreate : Migration
+    public partial class InicialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,7 @@ namespace Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nomenclature = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdPatient = table.Column<int>(type: "int", nullable: false)
+                    Neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,24 +100,41 @@ namespace Infrastructure.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PatientId = table.Column<int>(type: "int", nullable: true),
-                    CareStaffId = table.Column<int>(type: "int", nullable: true)
+                    PatientId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quotes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Quotes_CareStaffs_CareStaffId",
-                        column: x => x.CareStaffId,
-                        principalTable: "CareStaffs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Quotes_Patient_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patient",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuoteCareStaffs",
+                columns: table => new
+                {
+                    IdCareStaff = table.Column<int>(type: "int", nullable: false),
+                    IdQuote = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuoteCareStaffs", x => new { x.IdQuote, x.IdCareStaff });
+                    table.ForeignKey(
+                        name: "FK_QuoteCareStaffs_CareStaffs_IdCareStaff",
+                        column: x => x.IdCareStaff,
+                        principalTable: "CareStaffs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuoteCareStaffs_Quotes_IdQuote",
+                        column: x => x.IdQuote,
+                        principalTable: "Quotes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -132,9 +148,9 @@ namespace Infrastructure.Migrations
                 column: "DirectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Quotes_CareStaffId",
-                table: "Quotes",
-                column: "CareStaffId");
+                name: "IX_QuoteCareStaffs_IdCareStaff",
+                table: "QuoteCareStaffs",
+                column: "IdCareStaff");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Quotes_PatientId",
@@ -145,16 +161,19 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Quotes");
+                name: "QuoteCareStaffs");
 
             migrationBuilder.DropTable(
                 name: "CareStaffs");
 
             migrationBuilder.DropTable(
-                name: "Patient");
+                name: "Quotes");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Patient");
 
             migrationBuilder.DropTable(
                 name: "Direction");

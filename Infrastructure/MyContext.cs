@@ -23,6 +23,21 @@ namespace Infrastructure
             // Configuration on creation
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Quote>()
+                .HasMany(c => c.CareStaff)
+                .WithMany(q => q.Quotes)
+                .UsingEntity<QuoteCareStaff>(
+
+                    qc => qc.HasOne(prop => prop.CareStaff)
+                    .WithMany()
+                    .HasForeignKey(prop => prop.IdCareStaff),
+
+                    qc => qc.HasOne(prop => prop.Quote)
+                    .WithMany()
+                    .HasForeignKey(prop => prop.IdQuote)
+
+                );
+
             modelBuilder.Entity<QuoteCareStaff>()
                 .HasKey(q => new { q.IdQuote, q.IdCareStaff });
         }

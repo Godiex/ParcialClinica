@@ -67,9 +67,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdPatient")
-                        .HasColumnType("int");
-
                     b.Property<string>("Neighborhood")
                         .HasColumnType("nvarchar(max)");
 
@@ -129,9 +126,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CareStaffId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -149,11 +143,24 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CareStaffId");
-
                     b.HasIndex("PatientId");
 
                     b.ToTable("Quotes");
+                });
+
+            modelBuilder.Entity("Domain.Entities.QuoteCareStaff", b =>
+                {
+                    b.Property<int>("IdQuote")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCareStaff")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdQuote", "IdCareStaff");
+
+                    b.HasIndex("IdCareStaff");
+
+                    b.ToTable("QuoteCareStaffs");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -197,10 +204,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Quote", b =>
                 {
-                    b.HasOne("Domain.Entities.CareStaff", null)
-                        .WithMany("Quotes")
-                        .HasForeignKey("CareStaffId");
-
                     b.HasOne("Domain.Entities.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId");
@@ -208,9 +211,23 @@ namespace Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Domain.Entities.CareStaff", b =>
+            modelBuilder.Entity("Domain.Entities.QuoteCareStaff", b =>
                 {
-                    b.Navigation("Quotes");
+                    b.HasOne("Domain.Entities.CareStaff", "CareStaff")
+                        .WithMany()
+                        .HasForeignKey("IdCareStaff")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Quote", "Quote")
+                        .WithMany()
+                        .HasForeignKey("IdQuote")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CareStaff");
+
+                    b.Navigation("Quote");
                 });
 #pragma warning restore 612, 618
         }

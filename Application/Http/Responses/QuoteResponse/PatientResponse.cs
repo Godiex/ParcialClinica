@@ -12,6 +12,7 @@ namespace Application.Http.Responses.QuoteResponse
         public int Age { get; set; }
         public string Telephone { get; set; }
         public DirectionResponse DirectionResponse { get; set; }
+
         public PatientResponse( Patient patient )
         {
             Identification = patient.Identification;
@@ -20,8 +21,8 @@ namespace Application.Http.Responses.QuoteResponse
             Photo = patient.Photo;
             Age = patient.GetAge();
             Telephone = patient.Telephone;
-
         }
+
         public PatientResponse Include (Direction direction)
         {
             if (direction != null) 

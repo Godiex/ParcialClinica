@@ -26,10 +26,17 @@ namespace WebApi.Controllers
             _userService = new UserService(unitOfWork);
         }
 
-        [HttpGet("Auth")]
-        public ActionResult<Response<LoginUserResponse>> Login(UserLoginRequest request)
+        [HttpPost("Auth")]
+        public ActionResult<Response<LoginUserResponse>> Login([FromBody] UserLoginRequest request)
         {
             var response = _userService.LoginUser(request);
+            return StatusCode((int)response.Code, response);
+        }
+
+        [HttpPost("CreateUser")]
+        public ActionResult<Response<LoginUserResponse>> CreateUser([FromBody] UserRequest request)
+        {
+            var response = _userService.CreateUser(request);
             return StatusCode((int)response.Code, response);
         }
     }
