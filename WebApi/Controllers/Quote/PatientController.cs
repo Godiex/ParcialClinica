@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("UpdatePatient{identification}")]
-        public ActionResult<Response<PatientResponse>> UpdatePatient(string identification, [FromBody] Patient patient)
+        public ActionResult<Response<PatientResponse>> UpdatePatient(string identification, [FromBody] PatientRequestUpdate patient)
         {
             var response = _patientService.Update(identification, patient);
             return StatusCode((int)response.Code, response);

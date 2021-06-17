@@ -137,15 +137,13 @@ namespace Application.Services.Quote
 
         private CareStaff MapCareStaff(CareStaffRequestUpdate careStaffRequestUpdated)
         {
-            return new CareStaff
-            {
-                Id = careStaffRequestUpdated.Id,
-                Identification = careStaffRequestUpdated.Identification,
-                Name = careStaffRequestUpdated.Name,
-                Surname = careStaffRequestUpdated.Surname,
-                Photo = careStaffRequestUpdated.Photo,
-                Type = careStaffRequestUpdated.Type
-            };
+            CareStaff careStaff = _careStaffRepository.FindFirstOrDefault(c => c.Identification == careStaffRequestUpdated.Identification);
+            careStaff.Identification = careStaffRequestUpdated.Identification;
+            careStaff.Name = careStaffRequestUpdated.Name;
+            careStaff.Surname = careStaffRequestUpdated.Surname;
+            careStaff.Photo = careStaffRequestUpdated.Photo;
+            careStaff.Type = careStaffRequestUpdated.Type;
+            return careStaff;
         }
 
     }
