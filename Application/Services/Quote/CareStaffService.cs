@@ -163,16 +163,20 @@ namespace Application.Services
 
         private void SetWorkStatus(DateTime date, CareStaff item)
         {
-            foreach (var quote in item.Quotes)
+            if (item.Quotes != null) 
             {
-                if (ItsDayQuote(date, quote))
+                foreach (var quote in item.Quotes)
                 {
-                    if (date.Hour >= quote.StartTime.Hour && date.Hour <= quote.EndTime.Hour -1)
+                    if (ItsDayQuote(date, quote))
                     {
-                        item.WorkStatus = true;
+                        if (date.Hour >= quote.StartTime.Hour && date.Hour <= quote.EndTime.Hour - 1)
+                        {
+                            item.WorkStatus = true;
+                        }
                     }
                 }
             }
+            
         }
 
         private bool ItsDayQuote(DateTime date, Quote quote)

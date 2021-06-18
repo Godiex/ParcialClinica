@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/b27aaeee-481b-4295-b762-23f2fb317d88/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/Clinica",
+    "appService.deploySubpath": "WebApi\\publish"
+}
