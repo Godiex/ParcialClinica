@@ -9,6 +9,7 @@ namespace Application.Http.Responses.QuoteResponse
 {
     public class QuoteResponse
     {
+        public int Id { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string State { get; set; }
@@ -17,6 +18,7 @@ namespace Application.Http.Responses.QuoteResponse
 
         public QuoteResponse(Quote quote)
         {
+            Id = quote.Id;
             StartTime = quote.StartTime;
             EndTime = quote.EndTime;
             State = quote.State;

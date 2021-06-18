@@ -41,6 +41,19 @@ namespace Application.Services
             }
         }
 
+        public Response<PatientResponse> Search(string identification)
+        {
+            try
+            {
+                Patient patient = _patientRepository.FindFirstOrDefault(c => c.Identification.Equals(identification) && c.State != false);
+                return Response<PatientResponse>.CreateResponseSuccess($"personal de atencion consultado con exito", HttpStatusCode.OK, new PatientResponse(patient));
+            }
+            catch (Exception e)
+            {
+                return Response<PatientResponse>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
         public Response<List<PatientResponse>> GetActivateds()
         {
             try

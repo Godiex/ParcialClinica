@@ -49,6 +49,20 @@ namespace WebApi.Controllers
             return StatusCode((int)response.Code, response);
         }
 
+        [HttpGet("GetFilterForType")]
+        public ActionResult<Response<CareStaffResponse>> GetAllCareStaff( string type)
+        {
+            var response = _careStaffService.GetFilterForType(type);
+            return StatusCode((int)response.Code, response);
+        }
+
+        [HttpGet("SearchCareStaff")]
+        public ActionResult<Response<CareStaffResponse>> SearchCareStaff(string identification)
+        {
+            var response = _careStaffService.Search(identification);
+            return StatusCode((int)response.Code, response);
+        }
+
         [HttpGet("GetPatientsWithQuote/{identification}")]
         public ActionResult<Response<List<QuoteAssignedToCareStaff>>> GetPatientsWithQuote(string identification)
         {

@@ -27,8 +27,8 @@ namespace Application.Services
         {
             try
             {
-                User user = _userRepository.FindBy(x => x.Username == request.Username && x.Password == Hash.GetSha256(request.Password),"Roles", user => user.OrderBy(u => u.Id)).ToList().First();
-                LoginUserResponse userResponse = new LoginUserResponse(user.Username, user.Roles);
+                User user = _userRepository.FindBy(x => x.Username == request.Username && x.Password == Hash.GetSha256(request.Password), "Roles,CareStaff", user => user.OrderBy(u => u.Id)).ToList().First();
+                LoginUserResponse userResponse = new LoginUserResponse(user , user.Roles);
                 return Response<LoginUserResponse>.CreateResponseSuccess("Usuario encontrado con exito",HttpStatusCode.OK, userResponse);
             }
             catch (Exception e)

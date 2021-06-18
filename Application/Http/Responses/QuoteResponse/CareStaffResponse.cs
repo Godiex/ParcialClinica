@@ -10,6 +10,7 @@ namespace Application.Http.Responses.QuoteResponse
     public class CareStaffResponse : PeopleResponse
     {
         public bool WorkStatus { get; set; }
+        public string Type { get; set; }
 
         public CareStaffResponse(CareStaff careStaff)
         {
@@ -18,6 +19,7 @@ namespace Application.Http.Responses.QuoteResponse
             Surname = careStaff.Surname;
             Photo = careStaff.Photo;
             WorkStatus = careStaff.WorkStatus;
+            Type = careStaff.Type;
         }
 
     }

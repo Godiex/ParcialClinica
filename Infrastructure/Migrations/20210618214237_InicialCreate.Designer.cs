@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20210618143838_InicialCreate")]
+    [Migration("20210618214237_InicialCreate")]
     partial class InicialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,6 +155,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("IdPatient")
                         .HasColumnType("int");
+
+                    b.Property<string>("Observation")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");

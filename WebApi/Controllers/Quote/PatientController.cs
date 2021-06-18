@@ -27,17 +27,24 @@ namespace WebApi.Controllers
             return StatusCode((int)response.Code, response);
         }
 
-        [HttpPut("UpdatePatient{identification}")]
+        [HttpPut("UpdatePatient/{identification}")]
         public ActionResult<Response<PatientResponse>> UpdatePatient(string identification, [FromBody] PatientRequestUpdate patient)
         {
             var response = _patientService.Update(identification, patient);
             return StatusCode((int)response.Code, response);
         }
 
-        [HttpDelete("DeletePatient{identification}")]
+        [HttpDelete("DeletePatient/{identification}")]
         public ActionResult<Response<PatientResponse>> DeletePatient(string identification)
         {
             var response = _patientService.Delete(identification);
+            return StatusCode((int)response.Code, response);
+        }
+
+        [HttpGet("SearchPatient")]
+        public ActionResult<Response<CareStaffResponse>> SearchPatient(string identification)
+        {
+            var response = _patientService.Search(identification);
             return StatusCode((int)response.Code, response);
         }
 

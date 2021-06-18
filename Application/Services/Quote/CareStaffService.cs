@@ -57,14 +57,40 @@ namespace Application.Services
             {
                 return Response<List<CareStaffResponse>>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
             }
-            
+        }
+
+        public Response<List<CareStaffResponse>> GetFilterForType(string type)
+        {
+            try
+            {
+                List<CareStaff> CareStaffs = _careStaffRepository.FindBy(c => c.Type.Equals(type)).ToList();
+                List<CareStaffResponse> CareStaffResponses = ConvertListCareStaffsResponse(CareStaffs);
+                return Response<List<CareStaffResponse>>.CreateResponseSuccess($"personal de atencions consultado con exito, Resultados : {CareStaffResponses.Count}", HttpStatusCode.OK, CareStaffResponses);
+            }
+            catch (Exception e)
+            {
+                return Response<List<CareStaffResponse>>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        public Response<CareStaffResponse> Search(string identification)
+        {
+            try
+            {
+                CareStaff CareStaff = _careStaffRepository.FindFirstOrDefault(c => c.Identification.Equals(identification) && c.State != false);
+                return Response<CareStaffResponse>.CreateResponseSuccess($"personal de atencion consultado con exito", HttpStatusCode.OK, new CareStaffResponse(CareStaff));
+            }
+            catch (Exception e)
+            {
+                return Response<CareStaffResponse>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
+            }
         }
 
         public Response<List<CareStaffResponse>> GetAll()
         {
             try
             {
-                List<CareStaff> CareStaffs = (List<CareStaff>)_careStaffRepository.GetAll(careStaff => careStaff.OrderBy(p => p.Id)).ToList();
+                List<CareStaff> CareStaffs = _careStaffRepository.GetAll(careStaff => careStaff.OrderBy(p => p.Id)).ToList();
                 List<CareStaffResponse> CareStaffResponses = ConvertListCareStaffsResponse(CareStaffs);
                 return Response<List<CareStaffResponse>>.CreateResponseSuccess($"personal de atencions consultado con exito, Resultados : {CareStaffResponses.Count}", HttpStatusCode.OK, CareStaffResponses);
             }

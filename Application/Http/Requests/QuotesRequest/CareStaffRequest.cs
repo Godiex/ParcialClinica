@@ -29,7 +29,6 @@ namespace Application.Http.Requests
 
     public class CareStaffRequestUpdate : PeopleRequest
     {
-        public int Id { get; set; }
         public string Type { get; set; }
 
         public CareStaff MapCareStaff(CareStaff careStaff)
@@ -40,6 +39,5 @@ namespace Application.Http.Requests
             careStaff.Type = Type;
             return careStaff;
         }
-
     }
 }

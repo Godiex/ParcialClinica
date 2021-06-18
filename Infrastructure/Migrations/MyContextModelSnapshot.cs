@@ -154,6 +154,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("IdPatient")
                         .HasColumnType("int");
 
+                    b.Property<string>("Observation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 

@@ -33,5 +33,26 @@ namespace WebApi.Controllers
             var response = _quoteService.GetAllQuotes();
             return StatusCode((int)response.Code, response);
         }
+
+        [HttpGet("SearchQuote")]
+        public ActionResult<Response<CareStaffResponse>> SearchQuote(int id)
+        {
+            var response = _quoteService.Search(id);
+            return StatusCode((int)response.Code, response);
+        }
+
+        [HttpPut("UpdateQuote")]
+        public ActionResult<Response<QuoteResponse>> UpdateQuote(QuoteRequestUpdated quoteRequestUpdated)
+        {
+            var response = _quoteService.Update(quoteRequestUpdated);
+            return StatusCode((int)response.Code, response);
+        }
+
+        [HttpPut("AnulatedQuote")]
+        public ActionResult<Response<QuoteResponse>> UpdateQuote(int idQuote)
+        {
+            var response = _quoteService.AnulatedQuote(idQuote);
+            return StatusCode((int)response.Code, response);
+        }
     }
 }

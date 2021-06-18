@@ -154,6 +154,7 @@ namespace Infrastructure.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Observation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdPatient = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

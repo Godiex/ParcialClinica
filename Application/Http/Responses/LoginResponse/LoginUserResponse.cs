@@ -7,10 +7,12 @@ namespace Application.Http.Responses
     {
         public string Username { get; set; }
         public List<RoleResponse> Roles { get; set; }
+        public string Identification { get; set; }
 
-        public LoginUserResponse(string username, List<Role> roles)
+        public LoginUserResponse(User user, List<Role> roles)
         {
-            Username = username;
+            Username = user.Username;
+            Identification = user.CareStaff != null ? user.CareStaff.Identification : "ADMIN";
             Roles = roles.ConvertAll(r => new RoleResponse(r));
         }
 

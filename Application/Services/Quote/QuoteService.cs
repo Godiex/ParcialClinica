@@ -39,6 +39,39 @@ namespace Application.Services
             }
         }
 
+        public Response<QuoteResponse> Update(QuoteRequestUpdated quoteRequestUpdated)
+        {
+            try
+            {
+                Quote quote = _quoteRepository.Find(quoteRequestUpdated.Id);
+                quote.State = quoteRequestUpdated.State;
+                quote.Observation = quote.Observation;
+                _quoteRepository.Edit(quote);
+                UnitOfWork.Commit();
+                return Response<QuoteResponse>.CreateResponseSuccess("Cita actualizada con exito", HttpStatusCode.Created);
+            }
+            catch (Exception e)
+            {
+                return Response<QuoteResponse>.CreateResponseFailed(e.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public Response<QuoteResponse> AnulatedQuote(int idQuote)
+        {
+            try
+            {
+                Quote quote = _quoteRepository.Find(idQuote);
+                quote.State = "Anulada";
+                _quoteRepository.Edit(quote);
+                UnitOfWork.Commit();
+                return Response<QuoteResponse>.CreateResponseSuccess("Cita actualizada con exito", HttpStatusCode.Created);
+            }
+            catch (Exception e)
+            {
+                return Response<QuoteResponse>.CreateResponseFailed(e.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
         public Response<List<QuoteResponse>> GetAllQuotes()
         {
             try
@@ -50,6 +83,19 @@ namespace Application.Services
             catch (Exception e)
             {
                 return Response<List<QuoteResponse>>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        public Response<QuoteResponse> Search(int id)
+        {
+            try
+            {
+                Quote quote = _quoteRepository.FindBy(c => c.Id == id, "Patient.Direction,CareStaff", q => q.OrderBy(p => p.Id)).First();
+                return Response<QuoteResponse>.CreateResponseSuccess($"personal de atencion consultado con exito", HttpStatusCode.OK, new QuoteResponse(quote).Include(quote.CareStaff, quote.Patient));
+            }
+            catch (Exception e)
+            {
+                return Response<QuoteResponse>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
             }
         }
 

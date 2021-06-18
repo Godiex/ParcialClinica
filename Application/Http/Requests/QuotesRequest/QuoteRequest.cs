@@ -27,7 +27,7 @@ namespace Application.Http.Requests
 
     public class QuoteRequestUpdated
     {
-        public int IdQuote { get; set; }
+        public int Id { get; set; }
         public string State { get; set; }
         public string Observation { get; set; }
 

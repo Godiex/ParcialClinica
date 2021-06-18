@@ -13,6 +13,7 @@ namespace Domain.Entities
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string State { get; set; }
+        public string Observation { get; set; }
         public int IdPatient { get; set; }
         public Patient Patient { get; set; }
         public List<CareStaff> CareStaff { get; }
