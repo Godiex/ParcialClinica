@@ -41,7 +41,7 @@ namespace WebApi.Controllers
             return StatusCode((int)response.Code, response);
         }
 
-        [HttpGet("SearchPatient")]
+        [HttpGet("SearchPatient/{identification}")]
         public ActionResult<Response<CareStaffResponse>> SearchPatient(string identification)
         {
             var response = _patientService.Search(identification);

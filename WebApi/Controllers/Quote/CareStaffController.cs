@@ -49,14 +49,14 @@ namespace WebApi.Controllers
             return StatusCode((int)response.Code, response);
         }
 
-        [HttpGet("GetFilterForType")]
-        public ActionResult<Response<CareStaffResponse>> GetAllCareStaff( string type)
+        [HttpGet("GetFilterForType/{type}")]
+        public ActionResult<Response<CareStaffResponse>> GetFilterForType(string type)
         {
             var response = _careStaffService.GetFilterForType(type);
             return StatusCode((int)response.Code, response);
         }
 
-        [HttpGet("SearchCareStaff")]
+        [HttpGet("SearchCareStaff/{identification}")]
         public ActionResult<Response<CareStaffResponse>> SearchCareStaff(string identification)
         {
             var response = _careStaffService.Search(identification);

@@ -34,8 +34,8 @@ namespace WebApi.Controllers
             return StatusCode((int)response.Code, response);
         }
 
-        [HttpGet("SearchQuote")]
-        public ActionResult<Response<CareStaffResponse>> SearchQuote(int id)
+        [HttpGet("SearchQuote/{id}")]
+        public ActionResult<Response<QuoteResponse>> SearchQuote(int id)
         {
             var response = _quoteService.Search(id);
             return StatusCode((int)response.Code, response);
@@ -48,8 +48,8 @@ namespace WebApi.Controllers
             return StatusCode((int)response.Code, response);
         }
 
-        [HttpPut("AnulatedQuote")]
-        public ActionResult<Response<QuoteResponse>> UpdateQuote(int idQuote)
+        [HttpPut("AnulatedQuote/{idQuote}")]
+        public ActionResult<Response<QuoteResponse>> AnulatedQuote(int idQuote)
         {
             var response = _quoteService.AnulatedQuote(idQuote);
             return StatusCode((int)response.Code, response);
