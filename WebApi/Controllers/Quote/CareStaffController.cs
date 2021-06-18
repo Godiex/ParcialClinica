@@ -2,7 +2,6 @@
 using Application.Http.Requests;
 using Application.Http.Responses.QuoteResponse;
 using Application.Services;
-using Application.Services.Quote;
 using Domain.Contract;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;

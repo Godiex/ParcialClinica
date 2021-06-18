@@ -11,12 +11,12 @@ namespace Domain.Entities
     {
         public string Type { get; set; }
         public bool WorkStatus { get; set; }
-        public User User { get; set; }
+
 
         #region Relaciones entre tablas
-
+        public int IdUser { get; set; }
+        public User User { get; set; }
         public List<Quote> Quotes { get; set; }
-
         #endregion Relaciones entre tablas
 
         public CareStaff(string type, string name, string surname) : base(name, surname)

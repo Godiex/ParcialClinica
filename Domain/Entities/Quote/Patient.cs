@@ -13,8 +13,13 @@ namespace Domain.Entities
     {
         public DateTime DateOfBirth { get; set; }
         public string Telephone { get; set; }
+
+        #region Relaciones entre tablas
         public int IdDireccion { get; set; }
         public Direction Direction { get; set; }
+        [NotMapped] public int IdQuote { get; set; }
+        public Quote Quote { get; set; }
+        #endregion Relaciones entre tablas
 
         public Patient(DateTime dateOfBirth, string telephone, Direction direction, string name, string surname) : base(name, surname)
         {

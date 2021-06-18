@@ -1,6 +1,7 @@
 ﻿using Domain.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,12 @@ namespace Domain.Entities
         public string City { get; set; }
         public string Neighborhood { get; set; }
 
-        public Direction(string nomenclature, string city, string neighborhood)
+        #region Relaciones entre tablas
+        [NotMapped] public int IdPatient { get; set; }
+        public Patient Patient { get; set; }
+        #endregion Relaciones entre tablas
+
+    public Direction(string nomenclature, string city, string neighborhood)
         {
             Nomenclature = nomenclature;
             City = city;

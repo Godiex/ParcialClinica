@@ -13,6 +13,7 @@ namespace Domain.Entities
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string State { get; set; }
+        public int IdPatient { get; set; }
         public Patient Patient { get; set; }
         public List<CareStaff> CareStaff { get; }
 
@@ -22,15 +23,16 @@ namespace Domain.Entities
             StartTime = startTime;
             EndTime = endTime;
             Patient = patient;
+            CareStaff = new List<CareStaff>();
         }
         public Quote()
         {
-
+            CareStaff = new List<CareStaff>();
         }
 
-        public void AddCareStaff(CareStaff careStaff) 
+        public void AddRangeCareStaff(List<CareStaff> careStaff) 
         {
-            CareStaff.Add(careStaff);
+            CareStaff.AddRange(careStaff);
         }
 
     }

@@ -3,6 +3,7 @@ using System.Text;
 using Domain.Contract;
 using Infrastructure;
 using Infrastructure.Base;
+using Infrastructure.Initialize;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -69,6 +70,16 @@ namespace WebApi
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            InitializeDatabase(app, env);
+        }
+
+        public static void InitializeDatabase(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            var contex = scope.ServiceProvider.GetRequiredService<MyContext>();
+            var start = new Start(contex);
+            start.Initialize();
         }
     }
 }

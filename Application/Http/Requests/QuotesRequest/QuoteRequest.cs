@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Http.Requests
 {
@@ -8,12 +9,27 @@ namespace Application.Http.Requests
     {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public Patient Patient { get; set; }
-        private List<CareStaff> CareStaff { get; set; }
+        public string IdentificationPatient { get; set; }
+        public List<CareStaffQuoteRequest> CareStaff { get; set; }
 
-        public void AddCareStaff(CareStaff careStaff)
+        public Quote MapQuote() 
         {
-            CareStaff.Add(careStaff);
+            Quote quote = new Quote
+            {
+                StartTime = StartTime,
+                EndTime = EndTime,
+                Date = DateTime.Now,
+                State = "Asignado"
+            };
+            return quote;
         }
+    }
+
+    public class QuoteRequestUpdated
+    {
+        public int IdQuote { get; set; }
+        public string State { get; set; }
+        public string Observation { get; set; }
+
     }
 }

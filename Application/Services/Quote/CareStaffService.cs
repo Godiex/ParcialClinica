@@ -11,7 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Services.Quote
+namespace Application.Services
 {
     public class CareStaffService : Service<CareStaff>
     {
@@ -32,7 +32,7 @@ namespace Application.Services.Quote
                 {
                     return Response<CareStaffResponse>.CreateResponseFailed($"El personal de atencion (a) con identificacion : {CareStaffRequest.Identification} ya se encuentra registrado ", HttpStatusCode.BadRequest);
                 }
-                CareStaff CareStaff = MapCareStaff(CareStaffRequest);
+                CareStaff CareStaff = CareStaffRequest.MapCareStaff();
                 _careStaffRepository.Add(CareStaff);
                 UnitOfWork.Commit();
                 return Response<CareStaffResponse>.CreateResponseSuccess($"personal de atencion {CareStaffRequest.Name} registrado con exito", HttpStatusCode.Created);
@@ -122,27 +122,10 @@ namespace Application.Services.Quote
             return CareStaffs.ConvertAll(CareStaff => new CareStaffResponse(CareStaff));
         }
 
-        private CareStaff MapCareStaff(CareStaffRequest careStaffRequest)
-        {
-            return new CareStaff
-            {
-                Identification = careStaffRequest.Identification,
-                Name = careStaffRequest.Name,
-                Surname = careStaffRequest.Surname,
-                Photo = careStaffRequest.Photo,
-                State = true,
-                Type = careStaffRequest.Type
-            };
-        }
-
         private CareStaff MapCareStaff(CareStaffRequestUpdate careStaffRequestUpdated)
         {
             CareStaff careStaff = _careStaffRepository.FindFirstOrDefault(c => c.Identification == careStaffRequestUpdated.Identification);
-            careStaff.Identification = careStaffRequestUpdated.Identification;
-            careStaff.Name = careStaffRequestUpdated.Name;
-            careStaff.Surname = careStaffRequestUpdated.Surname;
-            careStaff.Photo = careStaffRequestUpdated.Photo;
-            careStaff.Type = careStaffRequestUpdated.Type;
+            careStaff = careStaffRequestUpdated.MapCareStaff(careStaff);
             return careStaff;
         }
 

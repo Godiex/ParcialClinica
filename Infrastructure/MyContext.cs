@@ -15,7 +15,7 @@ namespace Infrastructure
         public DbSet<Patient> Patients { get; set; }
         public DbSet<CareStaff> CareStaffs { get; set; }
         public DbSet<Quote> Quotes { get; set; }
-        public DbSet<QuoteCareStaff> QuoteCareStaffs { get; set; }
+        public DbSet<Role> Roles { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,23 +23,21 @@ namespace Infrastructure
             // Configuration on creation
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.Direction)
+                .WithOne(i => i.Patient)
+                .HasForeignKey<Patient>(p => p.IdDireccion);
+
+            modelBuilder.Entity<CareStaff>()
+                .HasOne(c => c.User)
+                .WithOne(u => u.CareStaff)
+                .HasForeignKey<CareStaff>(c => c.IdUser);
+
             modelBuilder.Entity<Quote>()
-                .HasMany(c => c.CareStaff)
-                .WithMany(q => q.Quotes)
-                .UsingEntity<QuoteCareStaff>(
+                .HasOne(q => q.Patient)
+                .WithMany()
+                .HasForeignKey(q => q.IdPatient);
 
-                    qc => qc.HasOne(prop => prop.CareStaff)
-                    .WithMany()
-                    .HasForeignKey(prop => prop.IdCareStaff),
-
-                    qc => qc.HasOne(prop => prop.Quote)
-                    .WithMany()
-                    .HasForeignKey(prop => prop.IdQuote)
-
-                );
-
-            modelBuilder.Entity<QuoteCareStaff>()
-                .HasKey(q => new { q.IdQuote, q.IdCareStaff });
         }
     }
 }

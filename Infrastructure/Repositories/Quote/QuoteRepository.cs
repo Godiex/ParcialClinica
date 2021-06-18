@@ -8,7 +8,9 @@ namespace Infrastructure.Repositories
     {
         public QuoteRepository(IDbContext context) : base(context)
         {
-
+            
         }
+
+        public void metodo() { }
     }
 }

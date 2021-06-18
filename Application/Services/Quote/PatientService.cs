@@ -30,7 +30,7 @@ namespace Application.Services
                 {
                     return Response<PatientResponse>.CreateResponseFailed($"El paciente (a) con identificacion : {patientRequest.Identification} ya se encuentra registrado ", HttpStatusCode.BadRequest);
                 }
-                Patient patient = MapPatient(patientRequest);
+                Patient patient = patientRequest.MapPatient();
                 _patientRepository.Add(patient);
                 UnitOfWork.Commit();
                 return Response<PatientResponse>.CreateResponseSuccess($"Paciente {patientRequest.Name} registrado con exito", HttpStatusCode.Created);
@@ -118,38 +118,11 @@ namespace Application.Services
             return patients.ConvertAll(patient => new PatientResponse(patient).Include(patient.Direction));
         }
 
-        private Patient MapPatient(PatientRequest patientRequest)
-        {
-            Patient patient = new Patient
-            {
-                Identification = patientRequest.Identification,
-                Name = patientRequest.Name,
-                Surname = patientRequest.Surname,
-                DateOfBirth = patientRequest.DateOfBirth,
-                Photo = patientRequest.Photo,
-                Direction = MapDirection(patientRequest.Direction),
-                State = true
-            };
-            return patient;
-        }
-
         private Patient MapPatient(PatientRequestUpdate patientRequestUpdated)
         {
             Patient patient = _patientRepository.FindFirstOrDefault(p => p.Identification == patientRequestUpdated.Identification);
-            patient.Identification = patientRequestUpdated.Identification;
-            patient.Name = patientRequestUpdated.Name;
-            patient.Surname = patientRequestUpdated.Surname;
-            patient.DateOfBirth = patientRequestUpdated.DateOfBirth;
-            patient.Photo = patientRequestUpdated.Photo;
-            patient.Telephone = patientRequestUpdated.Telephone;
-            patient.Direction = MapDirection(patientRequestUpdated.Direction);
+            patient = patientRequestUpdated.MapPatient(patient);
             return patient;
-        }
-
-        private Direction MapDirection(DirectionRequest directionRequest) 
-        {
-            Direction direction = new Direction(directionRequest.Nomenclature,directionRequest.City, directionRequest.Neighborhood);
-            return direction;
         }
 
     }

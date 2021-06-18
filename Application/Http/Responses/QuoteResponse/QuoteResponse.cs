@@ -25,7 +25,7 @@ namespace Application.Http.Responses.QuoteResponse
         public QuoteResponse Include(List<CareStaff> careStaff, Patient patient) 
         {
             CareStaff = careStaff.ConvertAll(c => new CareStaffResponse(c)).ToList();
-            Patient = new PatientResponse(patient);
+            Patient = new PatientResponse(patient).Include(patient.Direction);
             return this;
         }
 
