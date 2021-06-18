@@ -30,4 +30,29 @@ namespace Application.Http.Responses.QuoteResponse
         }
 
     }
+
+    public class QuoteAssignedToCareStaff
+    {
+        public int Id { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string State { get; set; }
+        public PatientResponse Patient { get; set; }
+
+        public QuoteAssignedToCareStaff(Quote quote)
+        {
+            Id = quote.Id;
+            StartTime = quote.StartTime;
+            EndTime = quote.EndTime;
+            State = quote.State;
+        }
+
+        public QuoteAssignedToCareStaff Include(Patient patient)
+        {
+            Patient = new PatientResponse(patient).Include(patient.Direction);
+            return this;
+        }
+
+    }
+
 }

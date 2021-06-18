@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Application.Base;
 using Application.Http.Requests;
@@ -13,18 +15,20 @@ namespace Application.Services
     public class UserService : Service<User>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
 
         public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _userRepository = unitOfWork.UserRepository;
+            _roleRepository = unitOfWork.RoleRepository;
         }
 
         public Response<LoginUserResponse> LoginUser(UserLoginRequest request)
         {
             try
             {
-                User user = _userRepository.FindFirstOrDefault(x => x.Username == request.Username && x.Password == Hash.GetSha256(request.Password));
-                LoginUserResponse userResponse = new LoginUserResponse(user.Username);
+                User user = _userRepository.FindBy(x => x.Username == request.Username && x.Password == Hash.GetSha256(request.Password),"Roles", user => user.OrderBy(u => u.Id)).ToList().First();
+                LoginUserResponse userResponse = new LoginUserResponse(user.Username, user.Roles);
                 return Response<LoginUserResponse>.CreateResponseSuccess("Usuario encontrado con exito",HttpStatusCode.OK, userResponse);
             }
             catch (Exception e)
@@ -49,14 +53,28 @@ namespace Application.Services
             } 
         }
 
-        private User MapUser(UserRequest userRequest) 
+        public User MapUser(UserRequest userRequest)
         {
             User user = new User
             {
                 Username = userRequest.Username,
                 Password = Hash.GetSha256(userRequest.Password)
             };
+            List<Role> roles = GetRoles(userRequest);
+            user.AddRangeRoles(roles);
             return user;
+        }
+
+        private List<Role> GetRoles(UserRequest userRequest)
+        {
+            List<Role> roles = new List<Role>();
+            foreach (int id in userRequest.IdRoles)
+            {
+                Role role = _roleRepository.FindFirstOrDefault(r => r.Id == id);
+                roles.Add(role);
+            }
+
+            return roles;
         }
     }
 }

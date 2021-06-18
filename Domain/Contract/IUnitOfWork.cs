@@ -10,6 +10,7 @@ namespace Domain.Contract
         public ICareStaffRepository CareStaffRepository { get; }
         public IPatientRepository PatientRepository { get; }
         public IQuoteRepository QuoteRepository { get; }
+        public IRoleRepository RoleRepository { get; }
         #endregion
 
         int Commit();

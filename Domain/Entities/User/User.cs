@@ -8,7 +8,7 @@ namespace Domain.Entities
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public List<Role> Roles { get; set; }
+        public List<Role> Roles { get; }
 
         #region Relaciones entre tablas
         [NotMapped] public int IdCareStaff { get; set; }
@@ -22,9 +22,14 @@ namespace Domain.Entities
             Password = password;
         }
 
+        public void AddRangeRoles(List<Role> roles) 
+        {
+            Roles.AddRange(roles);
+        }
+
         public User()
         {
-
+            Roles = new List<Role>();
         }
     }
 }

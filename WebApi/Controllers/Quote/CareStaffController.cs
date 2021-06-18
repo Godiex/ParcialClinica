@@ -6,6 +6,7 @@ using Domain.Contract;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace WebApi.Controllers
 {
@@ -45,6 +46,13 @@ namespace WebApi.Controllers
         public ActionResult<Response<CareStaffResponse>> GetAllCareStaff()
         {
             var response = _careStaffService.GetAll();
+            return StatusCode((int)response.Code, response);
+        }
+
+        [HttpGet("GetPatientsWithQuote/{identification}")]
+        public ActionResult<Response<List<QuoteAssignedToCareStaff>>> GetPatientsWithQuote(string identification)
+        {
+            var response = _careStaffService.GetPatientsWithQuote(identification);
             return StatusCode((int)response.Code, response);
         }
 

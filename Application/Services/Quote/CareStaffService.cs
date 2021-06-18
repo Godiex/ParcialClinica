@@ -17,11 +17,12 @@ namespace Application.Services
     {
         private readonly IPatientRepository _patientRepository;
         private readonly ICareStaffRepository _careStaffRepository;
-
+        private readonly UserService userService;
         public CareStaffService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _careStaffRepository = unitOfWork.CareStaffRepository;
             _patientRepository = unitOfWork.PatientRepository;
+            userService = new UserService(unitOfWork);
         }
 
         public Response<CareStaffResponse> Create(CareStaffRequest CareStaffRequest)
@@ -32,10 +33,11 @@ namespace Application.Services
                 {
                     return Response<CareStaffResponse>.CreateResponseFailed($"El personal de atencion (a) con identificacion : {CareStaffRequest.Identification} ya se encuentra registrado ", HttpStatusCode.BadRequest);
                 }
-                CareStaff CareStaff = CareStaffRequest.MapCareStaff();
-                _careStaffRepository.Add(CareStaff);
+                CareStaff careStaff = CareStaffRequest.MapCareStaff();
+                careStaff.User = userService.MapUser(CareStaffRequest.User);
+                _careStaffRepository.Add(careStaff);
                 UnitOfWork.Commit();
-                return Response<CareStaffResponse>.CreateResponseSuccess($"personal de atencion {CareStaffRequest.Name} registrado con exito", HttpStatusCode.Created);
+                return Response<CareStaffResponse>.CreateResponseSuccess($"personal de atencion {careStaff.Name} registrado con exito", HttpStatusCode.Created);
             }
             catch (Exception e)
             {
@@ -47,7 +49,7 @@ namespace Application.Services
         {
             try
             {
-                List<CareStaff> CareStaffs = (List<CareStaff>)_careStaffRepository.FindBy(careStaff => careStaff.State == true).ToList();
+                List<CareStaff> CareStaffs = _careStaffRepository.FindBy(c => c != null, "Quotes", careStaff => careStaff.OrderBy(p => p.Id)).ToList();
                 List<CareStaffResponse> CareStaffResponses = ConvertListCareStaffsResponse(CareStaffs);
                 return Response<List<CareStaffResponse>>.CreateResponseSuccess($"personal de atencions consultado con exito, Resultados : {CareStaffResponses.Count}", HttpStatusCode.OK, CareStaffResponses);
             }
@@ -70,6 +72,36 @@ namespace Application.Services
             {
                 return Response<List<CareStaffResponse>>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
             }
+        }
+
+        public Response<List<QuoteAssignedToCareStaff>> GetPatientsWithQuote(string identification)
+        {
+            try
+            {
+                CareStaff careStaffs = _careStaffRepository.FindBy(c => c.Identification == identification, "Quotes.Patient.Direction", careStaff => careStaff.OrderBy(p => p.Id)).ToList().First();
+                List<QuoteAssignedToCareStaff> quotesAssignedsToCareStaff = FillQuoteAssignedToCareStaff(careStaffs);
+
+                return Response<List<QuoteAssignedToCareStaff>>.CreateResponseSuccess($"Citas del personal de atencion consultado con exito", HttpStatusCode.OK, quotesAssignedsToCareStaff);
+            }
+            catch (Exception e)
+            {
+                return Response<List<QuoteAssignedToCareStaff>>.CreateResponseFailed(e.Message, HttpStatusCode.BadRequest);
+            }
+        }
+
+        private List<QuoteAssignedToCareStaff> FillQuoteAssignedToCareStaff(CareStaff careStaffs)
+        {
+            List<QuoteAssignedToCareStaff> quotesAssignedsToCareStaff = new List<QuoteAssignedToCareStaff>();
+            foreach (var item in careStaffs.Quotes)
+            {
+                if (!item.State.Equals("Anulada") && !item.State.Equals("Atendido"))
+                {
+                    QuoteAssignedToCareStaff quoteAssignedToCareStaff = new QuoteAssignedToCareStaff(item).Include(item.Patient);
+                    quotesAssignedsToCareStaff.Add(quoteAssignedToCareStaff);
+                }
+            }
+
+            return quotesAssignedsToCareStaff;
         }
 
         public Response<CareStaffResponse> Update(string identification, CareStaffRequestUpdate careStaffRequestUpdated)
@@ -117,9 +149,35 @@ namespace Application.Services
             return careStaff != null || patient != null ? true : false;
         }
 
-        private List<CareStaffResponse> ConvertListCareStaffsResponse(List<CareStaff> CareStaffs)
+        private List<CareStaffResponse> ConvertListCareStaffsResponse(List<CareStaff> careStaffs)
         {
-            return CareStaffs.ConvertAll(CareStaff => new CareStaffResponse(CareStaff));
+            DateTime date = DateTime.Now;
+            
+            foreach (var item in careStaffs)
+            {
+                SetWorkStatus(date, item);
+            }
+            List<CareStaffResponse> careStaffResponses = careStaffs.ConvertAll(CareStaff => new CareStaffResponse(CareStaff));
+            return careStaffResponses;
+        }
+
+        private void SetWorkStatus(DateTime date, CareStaff item)
+        {
+            foreach (var quote in item.Quotes)
+            {
+                if (ItsDayQuote(date, quote))
+                {
+                    if (date.Hour >= quote.StartTime.Hour && date.Hour <= quote.EndTime.Hour -1)
+                    {
+                        item.WorkStatus = true;
+                    }
+                }
+            }
+        }
+
+        private bool ItsDayQuote(DateTime date, Quote quote)
+        {
+            return date.Day == quote.Date.Day && date.Month == quote.Date.Month && date.Year == quote.Date.Year;
         }
 
         private CareStaff MapCareStaff(CareStaffRequestUpdate careStaffRequestUpdated)
