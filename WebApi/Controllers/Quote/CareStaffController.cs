@@ -46,7 +46,7 @@ namespace WebApi.Controllers
         public ActionResult<Response<CareStaffResponse>> GetAllCareStaff()
         {
             var response = _careStaffService.GetAll();
-            return StatusCode((int)response.Code, response);
+            return StatusCode((int)response.Code,response);
         }
 
         [HttpGet("GetFilterForType/{type}")]
